@@ -1,14 +1,14 @@
 /***********************************************
- * CONFIDENTIAL AND PROPRIETARY 
- * 
+ * CONFIDENTIAL AND PROPRIETARY
+ *
  * The source code and other information contained herein is the confidential and the exclusive property of
  * ZIH Corp. and is subject to the terms and conditions in your end user license agreement.
- * This source code, and any other information contained herein, shall not be copied, reproduced, published, 
+ * This source code, and any other information contained herein, shall not be copied, reproduced, published,
  * displayed or distributed, in whole or in part, in any medium, by any means, for any purpose except as
  * expressly permitted under such license agreement.
- * 
+ *
  * Copyright ZIH Corp. 2012
- * 
+ *
  * ALL RIGHTS RESERVED
  ***********************************************/
 package com.example.printstation_demo_new.util;
@@ -33,17 +33,44 @@ public class SavedFormatProvider {
 	private static final String DATABASE_NAME = "saved_formats.db";
 	private static final int DATABASE_VERSION = 1;
 
-	private static final String INVOICE_FORMAT_TEXT =
+
+	/*private static final String INVOICE_FORMAT_TEXT =
 			"^XA" +
 					"^CI28" +
 					"^DFE:RFID_TAG.ZPL^FS" +
-					"^FT20,20^A0N,20,20^FH\\^FN1\"PO Number\"^FS" +
-					"^FT20,50^A0N,20,20^FH\\^FN2\"Tag Data\"^FS" +
-					"^FT20,80^A0N,20,20^FH\\^FN3\"Doc Number\"^FS" +
-					"^FT20,110^A0N,20,20^FH\\^FN4\"Material Number\"^FS" +
-					"^FT20,140^A0N,20,20^FH\\^FN5\"Material Description\"^FS" +
-					"^FT20,170^A0N,20,20^FH\\^FN6\"Storage Location\"^FS" +
-					"^XZ";
+					"^FO20,20^A0N,20,20^FH\\^FN1\"PO Number\"^FS" +
+					"^FO20,50^A0N,20,20^FH\\^FN2\"Tag Data\"^FS" +
+					"^FO20,80^A0N,20,20^FH\\^FN3\"Doc Number\"^FS" +
+					"^FO20,110^A0N,20,20^FH\\^FN4\"Material Number\"^FS" +
+					"^FO20,140^A0N,20,20^FH\\^FN5\"Material Description\"^FS" +
+					"^FO20,170^A0N,20,20^FH\\^FN6\"Storage Location\"^FS" +
+					"^XZ";*/
+
+	private static final String INVOICE_FORMAT_TEXT =
+			"^XA" +
+					/*"^CI28" +
+					"^DFE:RFID_TAG.ZPL^FS" +
+					// Adjusted positions for centering content
+					"^FO180,20^A0N,20,20^FH\\^FN1\"PO Number\"^FS" +
+					"^FO180,50^A0N,20,20^FH\\^FN2\"Tag Data\"^FS" +
+					"^FO180,80^A0N,20,20^FH\\^FN3\"Doc Number\"^FS" +
+					"^FO180,110^A0N,20,20^FH\\^FN4\"Material Number\"^FS" +
+					"^FO180,140^A0N,20,20^FH\\^FN5\"Material Description\"^FS" +
+					"^FO180,170^A0N,20,20^FH\\^FN6\"Storage Location\"^FS" +
+					"^XZ";*/
+
+	"^XA" +
+			"^CI28" +
+			"^DFE:RFID_TAG.ZPL^FS" +
+			"^FT181,184^A0N,28,28^FH\\^FN1\"PO\"^FS" +
+			"^FT181,282^A0N,28,28^FH\\^FN2\"Tag ID\"^FS" +
+			"^FT32,106^GFA,1024,1024,16::::::::::::::L0F8,L0HFI0IFC0,L0HFC00FHFC0K0380,K01FHFC0FHFC0J01FC0,K03E7FF00780K03FE0,K03E1FF00780J01FHF0,K03C03F00780J07FDF8,K07800700780I01FF8F0,K078007FKF807FF870,K07F007FKFC1FHF0,K07FF07FLF7FDF0,K03FFC7FNF3E0,L0JFL0HFC3E010,M0IFL07F07C010,M03FF0K03C078018,N03F0N0F8018,O0F0M01F0038,O070M01E003C,O070M03E003C,O070M07C003C,O070M0780030,O07FNF8,O07FNF0,:O07FMFE0,,:::::::::::::::::::::::^FT60,177^A0N,34,33^FH\\^FDPO:^FS" +
+			"^FT33,282^A0N,34,33^FH\\^FDTag ID^FS" +
+			"^FO172,239^GB287,64,8^FS" +
+			"^FO172,139^GB287,64,8^FS" +
+			"^FT153,77^A0N,56,55^FH\\^FDMaterial ^FS" +
+			"^FO27,110^GB432,0,8^FS" +
+			"^XZ";
 	private final DatabaseHelper mOpenHelper;
 
 	static
@@ -65,19 +92,19 @@ public class SavedFormatProvider {
 					+ SavedFormat.FORMAT_TEXT + " TEXT,"
 					+ SavedFormat.TIMESTAMP + " INTEGER"
 					+ ");");
-			
-//			String oilchangeFormat = 	"^XA" +
-//										"^CI28" +
-//										"^DFE:OILCHANGE.ZPL^FS" +
-//										"^FT181,184^A0N,28,28^FH\\^FN1\"Date\"^FS" +
-//										"^FT181,282^A0N,28,28^FH\\^FN2\"Mileage\"^FS" +
-//										"^FT32,106^GFA,1024,1024,16::::::::::::::L0F8,L0HFI0IFC0,L0HFC00FHFC0K0380,K01FHFC0FHFC0J01FC0,K03E7FF00780K03FE0,K03E1FF00780J01FHF0,K03C03F00780J07FDF8,K07800700780I01FF8F0,K078007FKF807FF870,K07F007FKFC1FHF0,K07FF07FLF7FDF0,K03FFC7FNF3E0,L0JFL0HFC3E010,M0IFL07F07C010,M03FF0K03C078018,N03F0N0F8018,O0F0M01F0038,O070M01E003C,O070M03E003C,O070M07C003C,O070M0780030,O07FNF8,O07FNF0,:O07FMFE0,,:::::::::::::::::::::::^FT60,177^A0N,34,33^FH\\^FDDATE^FS" +
-//										"^FT33,282^A0N,34,33^FH\\^FDMILEAGE^FS" +
-//										"^FO172,239^GB287,64,8^FS" +
-//										"^FO172,139^GB287,64,8^FS" +
-//										"^FT153,77^A0N,56,55^FH\\^FDOIL CHANGE^FS" +
-//										"^FO27,110^GB432,0,8^FS" +
-//										"^XZ";
+
+			String oilchangeFormat = 	"^XA" +
+										"^CI28" +
+										"^DFE:OILCHANGE.ZPL^FS" +
+										"^FT181,184^A0N,28,28^FH\\^FN1\"Date\"^FS" +
+										"^FT181,282^A0N,28,28^FH\\^FN2\"Mileage\"^FS" +
+										"^FT32,106^GFA,1024,1024,16::::::::::::::L0F8,L0HFI0IFC0,L0HFC00FHFC0K0380,K01FHFC0FHFC0J01FC0,K03E7FF00780K03FE0,K03E1FF00780J01FHF0,K03C03F00780J07FDF8,K07800700780I01FF8F0,K078007FKF807FF870,K07F007FKFC1FHF0,K07FF07FLF7FDF0,K03FFC7FNF3E0,L0JFL0HFC3E010,M0IFL07F07C010,M03FF0K03C078018,N03F0N0F8018,O0F0M01F0038,O070M01E003C,O070M03E003C,O070M07C003C,O070M0780030,O07FNF8,O07FNF0,:O07FMFE0,,:::::::::::::::::::::::^FT60,177^A0N,34,33^FH\\^FDDATE^FS" +
+										"^FT33,282^A0N,34,33^FH\\^FDMILEAGE^FS" +
+										"^FO172,239^GB287,64,8^FS" +
+										"^FO172,139^GB287,64,8^FS" +
+										"^FT153,77^A0N,56,55^FH\\^FDOIL CHANGE^FS" +
+										"^FO27,110^GB432,0,8^FS" +
+										"^XZ";
 //			String addressFormat = 	"^XA" +
 //									"^CI28" +
 //									"^DFE:ADDRESS.ZPL^FS" +
@@ -100,15 +127,15 @@ public class SavedFormatProvider {
 			);
 			//////////////////////////////////////////////////////////////////////////////////////////
 
-//			db.execSQL("INSERT INTO "+ SavedFormat.TABLE_NAME + "(" + SavedFormat._ID + ", " +
-//																	  SavedFormat.FORMAT_DRIVE + ", " +
-//																	  SavedFormat.FORMAT_NAME + ", " +
-//																	  SavedFormat.FORMAT_EXTENSION + ", " +
-//																	  SavedFormat.SOURCE_PRINTER_NAME + ", " +
-//																	  SavedFormat.FORMAT_TEXT + ", " +
-//																	  SavedFormat.TIMESTAMP + ") " +
-//														"VALUES (1, 'E:', 'OILCHANGE', '.ZPL', 'Sample', '" + oilchangeFormat + "', 1350426632404)"
-//					  );
+			db.execSQL("INSERT INTO "+ SavedFormat.TABLE_NAME + "(" + SavedFormat._ID + ", " +
+																	  SavedFormat.FORMAT_DRIVE + ", " +
+																	  SavedFormat.FORMAT_NAME + ", " +
+																	  SavedFormat.FORMAT_EXTENSION + ", " +
+																	  SavedFormat.SOURCE_PRINTER_NAME + ", " +
+																	  SavedFormat.FORMAT_TEXT + ", " +
+																	  SavedFormat.TIMESTAMP + ") " +
+														"VALUES (1, 'E:', 'OILCHANGE', '.ZPL', 'Sample', '" + oilchangeFormat + "', 1350426632404)"
+					  );
 //
 //			db.execSQL("INSERT INTO "+ SavedFormat.TABLE_NAME + "(" + SavedFormat._ID + ", " +
 //																	  SavedFormat.FORMAT_DRIVE + ", " +
@@ -127,7 +154,7 @@ public class SavedFormatProvider {
 			onCreate(db);
 		}
 	}
-	
+
 	public SavedFormatProvider (Context context) {
 		mOpenHelper = new DatabaseHelper ( context );
 	}
@@ -152,7 +179,7 @@ public class SavedFormatProvider {
 		ArrayList<SavedFormat> savedFormats = new ArrayList<SavedFormat>();
 		for(int i = 0; i < c.getCount(); i++) {
 			c.moveToNext();
-			
+
 			Long id = 0L;
 			String formatDrive = "";
 			String formatName = "";
@@ -160,7 +187,7 @@ public class SavedFormatProvider {
 			String sourcePrinterName = "";
 			Long timestamp = 0L;
 			String formatText = "";
-			
+
 			for (int j = 0; j < c.getColumnCount(); j++ ) {
 				String currentColumnName = c.getColumnName(j);
 				if (currentColumnName.equals(SavedFormat._ID)) {
@@ -181,9 +208,9 @@ public class SavedFormatProvider {
 			}
 			savedFormats.add(new SavedFormat(id, formatDrive, formatName, formatExtension, sourcePrinterName, timestamp, formatText));
 		}
-		
+
 		db.close();
-		
+
 		return savedFormats;
 	}
 
@@ -200,14 +227,14 @@ public class SavedFormatProvider {
 		values.put(SavedFormat.FORMAT_EXTENSION, formatExtension);
 		values.put(SavedFormat.SOURCE_PRINTER_NAME, sourcePrinterName);
 		values.put(SavedFormat.FORMAT_TEXT, formatText);
-		
+
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
 		long rowId = db.insert(
 				SavedFormat.TABLE_NAME,
 				null,
 				values);
-		
+
 		db.close();
 
 		return rowId;
@@ -219,7 +246,7 @@ public class SavedFormatProvider {
 		db.close();
 		return rowsDeleted > 0;
 	}
-	
+
 	public int getNumberOfStoredFormats() {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(SavedFormat.TABLE_NAME);
@@ -239,7 +266,7 @@ public class SavedFormatProvider {
 		db.close();
 		return retVal;
 	}
-	
+
 	public String getTimestampOfFormat(long id) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(SavedFormat.TABLE_NAME);
@@ -255,7 +282,7 @@ public class SavedFormatProvider {
 				null,
 				SavedFormat.TIMESTAMP
 				);
-		
+
 		try {
 			if (c.getCount() <= 0) {
 				return "";
@@ -269,7 +296,7 @@ public class SavedFormatProvider {
 			db.close();
 		}
 	}
-	
+
 	@SuppressLint("Range")
 	public String getFormatContents( long id) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -286,7 +313,7 @@ public class SavedFormatProvider {
 				null,
 				SavedFormat.TIMESTAMP
 				);
-		
+
 		try {
 			if (c.getCount() <= 0) {
 				return "";
