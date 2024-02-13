@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -31,9 +32,21 @@ public class SavedFormatProvider {
 
 	private static final String DATABASE_NAME = "saved_formats.db";
 	private static final int DATABASE_VERSION = 1;
-	
-	private DatabaseHelper mOpenHelper;
 
+	private static final String INVOICE_FORMAT_TEXT =
+			"^XA" +
+					"^CI28" +
+					"^DFE:RFID_TAG.ZPL^FS" +
+					"^FT20,20^A0N,20,20^FH\\^FN1\"PO Number\"^FS" +
+					"^FT20,50^A0N,20,20^FH\\^FN2\"Tag Data\"^FS" +
+					"^FT20,80^A0N,20,20^FH\\^FN3\"Doc Number\"^FS" +
+					"^FT20,110^A0N,20,20^FH\\^FN4\"Material Number\"^FS" +
+					"^FT20,140^A0N,20,20^FH\\^FN5\"Material Description\"^FS" +
+					"^FT20,170^A0N,20,20^FH\\^FN6\"Storage Location\"^FS" +
+					"^XZ";
+	private final DatabaseHelper mOpenHelper;
+
+	static
 	class DatabaseHelper extends SQLiteOpenHelper {
 
 		DatabaseHelper(Context context) {
@@ -42,6 +55,7 @@ public class SavedFormatProvider {
 
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+
 			db.execSQL("CREATE TABLE " + SavedFormat.TABLE_NAME + " ("
 					+ SavedFormat._ID + " INTEGER PRIMARY KEY,"
 					+ SavedFormat.FORMAT_DRIVE + " TEXT,"
@@ -52,46 +66,59 @@ public class SavedFormatProvider {
 					+ SavedFormat.TIMESTAMP + " INTEGER"
 					+ ");");
 			
-			String oilchangeFormat = 	"^XA" +
-										"^CI28" +
-										"^DFE:OILCHANGE.ZPL^FS" +
-										"^FT181,184^A0N,28,28^FH\\^FN1\"Date\"^FS" +
-										"^FT181,282^A0N,28,28^FH\\^FN2\"Mileage\"^FS" +
-										"^FT32,106^GFA,1024,1024,16::::::::::::::L0F8,L0HFI0IFC0,L0HFC00FHFC0K0380,K01FHFC0FHFC0J01FC0,K03E7FF00780K03FE0,K03E1FF00780J01FHF0,K03C03F00780J07FDF8,K07800700780I01FF8F0,K078007FKF807FF870,K07F007FKFC1FHF0,K07FF07FLF7FDF0,K03FFC7FNF3E0,L0JFL0HFC3E010,M0IFL07F07C010,M03FF0K03C078018,N03F0N0F8018,O0F0M01F0038,O070M01E003C,O070M03E003C,O070M07C003C,O070M0780030,O07FNF8,O07FNF0,:O07FMFE0,,:::::::::::::::::::::::^FT60,177^A0N,34,33^FH\\^FDDATE^FS" +
-										"^FT33,282^A0N,34,33^FH\\^FDMILEAGE^FS" +
-										"^FO172,239^GB287,64,8^FS" +
-										"^FO172,139^GB287,64,8^FS" +
-										"^FT153,77^A0N,56,55^FH\\^FDOIL CHANGE^FS" +
-										"^FO27,110^GB432,0,8^FS" +
-										"^XZ";
-			String addressFormat = 	"^XA" +
-									"^CI28" +
-									"^DFE:ADDRESS.ZPL^FS" +
-									"^FT80,80^A0N,28,28^FH\\^FN1\"Name\"^FS" +
-									"^FT80,110^A0N,28,28^FH\\^FN2\"Address1\"^FS" +
-									"^FT80,140^A0N,28,28^FH\\^FN3\"Address2\"^FS" +
-									"^FT80,170^A0N,28,28^FH\\^FN4\"CityStateZip\"^FS" +
-									"^XZ";
-			
-			db.execSQL("INSERT INTO "+ SavedFormat.TABLE_NAME + "(" + SavedFormat._ID + ", " + 
-																	  SavedFormat.FORMAT_DRIVE + ", " + 
-																	  SavedFormat.FORMAT_NAME + ", " +
-																	  SavedFormat.FORMAT_EXTENSION + ", " +
-																	  SavedFormat.SOURCE_PRINTER_NAME + ", " +
-																	  SavedFormat.FORMAT_TEXT + ", " +
-																	  SavedFormat.TIMESTAMP + ") " +
-														"VALUES (1, 'E:', 'OILCHANGE', '.ZPL', 'Sample', '" + oilchangeFormat + "', 1350426632404)"
-					  );
-			
-			db.execSQL("INSERT INTO "+ SavedFormat.TABLE_NAME + "(" + SavedFormat._ID + ", " + 
-																	  SavedFormat.FORMAT_DRIVE + ", " + 
-																	  SavedFormat.FORMAT_NAME + ", " +
-																	  SavedFormat.FORMAT_EXTENSION + ", " +
-																	  SavedFormat.SOURCE_PRINTER_NAME + ", " +
-																	  SavedFormat.FORMAT_TEXT + ", " +
-																	  SavedFormat.TIMESTAMP + ") " +
-					  									"VALUES (2, 'E:', 'ADDRESS', '.ZPL', 'Sample', '" + addressFormat + "', 1350426632404)"
-					  );
+//			String oilchangeFormat = 	"^XA" +
+//										"^CI28" +
+//										"^DFE:OILCHANGE.ZPL^FS" +
+//										"^FT181,184^A0N,28,28^FH\\^FN1\"Date\"^FS" +
+//										"^FT181,282^A0N,28,28^FH\\^FN2\"Mileage\"^FS" +
+//										"^FT32,106^GFA,1024,1024,16::::::::::::::L0F8,L0HFI0IFC0,L0HFC00FHFC0K0380,K01FHFC0FHFC0J01FC0,K03E7FF00780K03FE0,K03E1FF00780J01FHF0,K03C03F00780J07FDF8,K07800700780I01FF8F0,K078007FKF807FF870,K07F007FKFC1FHF0,K07FF07FLF7FDF0,K03FFC7FNF3E0,L0JFL0HFC3E010,M0IFL07F07C010,M03FF0K03C078018,N03F0N0F8018,O0F0M01F0038,O070M01E003C,O070M03E003C,O070M07C003C,O070M0780030,O07FNF8,O07FNF0,:O07FMFE0,,:::::::::::::::::::::::^FT60,177^A0N,34,33^FH\\^FDDATE^FS" +
+//										"^FT33,282^A0N,34,33^FH\\^FDMILEAGE^FS" +
+//										"^FO172,239^GB287,64,8^FS" +
+//										"^FO172,139^GB287,64,8^FS" +
+//										"^FT153,77^A0N,56,55^FH\\^FDOIL CHANGE^FS" +
+//										"^FO27,110^GB432,0,8^FS" +
+//										"^XZ";
+//			String addressFormat = 	"^XA" +
+//									"^CI28" +
+//									"^DFE:ADDRESS.ZPL^FS" +
+//									"^FT80,80^A0N,28,28^FH\\^FN1\"Name\"^FS" +
+//									"^FT80,110^A0N,28,28^FH\\^FN2\"Address1\"^FS" +
+//									"^FT80,140^A0N,28,28^FH\\^FN3\"Address2\"^FS" +
+//									"^FT80,170^A0N,28,28^FH\\^FN4\"CityStateZip\"^FS" +
+//									"^XZ";
+
+			//////////////////////////////////////////////////////////////////////////////////////////
+			String invoiceFormat = INVOICE_FORMAT_TEXT;
+			db.execSQL("INSERT INTO " + SavedFormat.TABLE_NAME + "(" + SavedFormat._ID + ", " +
+					SavedFormat.FORMAT_DRIVE + ", " +
+					SavedFormat.FORMAT_NAME + ", " +
+					SavedFormat.FORMAT_EXTENSION + ", " +
+					SavedFormat.SOURCE_PRINTER_NAME + ", " +
+					SavedFormat.FORMAT_TEXT + ", " +
+					SavedFormat.TIMESTAMP + ") " +
+					"VALUES (3, 'E:', 'RFID_TAG', '.ZPL', 'Sample', '" + invoiceFormat + "', 1350426632404)"
+			);
+			//////////////////////////////////////////////////////////////////////////////////////////
+
+//			db.execSQL("INSERT INTO "+ SavedFormat.TABLE_NAME + "(" + SavedFormat._ID + ", " +
+//																	  SavedFormat.FORMAT_DRIVE + ", " +
+//																	  SavedFormat.FORMAT_NAME + ", " +
+//																	  SavedFormat.FORMAT_EXTENSION + ", " +
+//																	  SavedFormat.SOURCE_PRINTER_NAME + ", " +
+//																	  SavedFormat.FORMAT_TEXT + ", " +
+//																	  SavedFormat.TIMESTAMP + ") " +
+//														"VALUES (1, 'E:', 'OILCHANGE', '.ZPL', 'Sample', '" + oilchangeFormat + "', 1350426632404)"
+//					  );
+//
+//			db.execSQL("INSERT INTO "+ SavedFormat.TABLE_NAME + "(" + SavedFormat._ID + ", " +
+//																	  SavedFormat.FORMAT_DRIVE + ", " +
+//																	  SavedFormat.FORMAT_NAME + ", " +
+//																	  SavedFormat.FORMAT_EXTENSION + ", " +
+//																	  SavedFormat.SOURCE_PRINTER_NAME + ", " +
+//																	  SavedFormat.FORMAT_TEXT + ", " +
+//																	  SavedFormat.TIMESTAMP + ") " +
+//					  									"VALUES (2, 'E:', 'ADDRESS', '.ZPL', 'Sample', '" + addressFormat + "', 1350426632404)"
+//					  );
 		}
 
 		@Override
@@ -102,7 +129,7 @@ public class SavedFormatProvider {
 	}
 	
 	public SavedFormatProvider (Context context) {
-		mOpenHelper = new DatabaseHelper(context);
+		mOpenHelper = new DatabaseHelper ( context );
 	}
 
 	public Collection<SavedFormat> getSavedFormats() {
@@ -235,7 +262,7 @@ public class SavedFormatProvider {
 			} else {
 				c.moveToFirst();
 				SimpleDateFormat timeFormat = new SimpleDateFormat(DATE_FORMAT);
-				Date date = new Date(c.getLong(c.getColumnIndex(SavedFormat.TIMESTAMP)));
+				@SuppressLint("Range") Date date = new Date(c.getLong(c.getColumnIndex(SavedFormat.TIMESTAMP)));
 				return timeFormat.format(date);
 			}
 		} finally {
@@ -243,7 +270,8 @@ public class SavedFormatProvider {
 		}
 	}
 	
-	public String getFormatContents(long id) {
+	@SuppressLint("Range")
+	public String getFormatContents( long id) {
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(SavedFormat.TABLE_NAME);
 
