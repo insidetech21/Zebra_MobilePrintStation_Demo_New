@@ -71,6 +71,8 @@ public class SavedFormatProvider {
 			"^FT153,77^A0N,56,55^FH\\^FDMaterial ^FS" +
 			"^FO27,110^GB432,0,8^FS" +
 			"^XZ";
+
+
 	private final DatabaseHelper mOpenHelper;
 
 	static
@@ -92,6 +94,18 @@ public class SavedFormatProvider {
 					+ SavedFormat.FORMAT_TEXT + " TEXT,"
 					+ SavedFormat.TIMESTAMP + " INTEGER"
 					+ ");");
+
+
+			String textToPrint = "Your text here"; // Replace "Your text here" with the text you want to print as a barcode
+
+
+			String labelFormat = 	"^XA" +
+					"^CI28" +
+					"^FO50,50^BY3" + // Set module width to 3 (adjust as needed)
+					"^B3N,N,100,Y,N" + // Code 128 barcode
+					"^FD" + textToPrint + "^FS" + // Actual text to print as a barcode
+					"^XZ";
+
 
 			String oilchangeFormat = 	"^XA" +
 										"^CI28" +
@@ -124,6 +138,16 @@ public class SavedFormatProvider {
 					SavedFormat.FORMAT_TEXT + ", " +
 					SavedFormat.TIMESTAMP + ") " +
 					"VALUES (3, 'E:', 'RFID_TAG', '.ZPL', 'Sample', '" + invoiceFormat + "', 1350426632404)"
+			);
+
+			db.execSQL("INSERT INTO " + SavedFormat.TABLE_NAME + "(" + SavedFormat._ID + ", " +
+					SavedFormat.FORMAT_DRIVE + ", " +
+					SavedFormat.FORMAT_NAME + ", " +
+					SavedFormat.FORMAT_EXTENSION + ", " +
+					SavedFormat.SOURCE_PRINTER_NAME + ", " +
+					SavedFormat.FORMAT_TEXT + ", " +
+					SavedFormat.TIMESTAMP + ") " +
+					"VALUES (2, 'E:', 'BARCODE', '.ZPL', 'Sample', '" + labelFormat + "', 1350426632404)"
 			);
 			//////////////////////////////////////////////////////////////////////////////////////////
 
